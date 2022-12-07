@@ -56,20 +56,30 @@ def calculate_values_and_weights(I: List[Item]) -> List[Tuple[List[int], int, in
 
 
 def apply_constraint(w: int, weighted_power_set: List[Tuple[List[int], int, int]]) -> List[Tuple[List[int], int, int]]:
-    filtered_power_set = list(filter(lambda set: set[1] < w, weighted_power_set))
-    print(filtered_power_set)
+    filtered_power_set = list(
+        filter(lambda set: set[1] < w, weighted_power_set))
     return filtered_power_set
 
-def calculate_max_value(filtered_power_set: List[Tuple[List[int],int,int]]):
-  max_val = 0
-  for set in filtered_power_set:
-    if set[1] > max_val:
-      max_val = set[1]
-  return list(filter(lambda set: set[1] == max_val, filtered_power_set))
+
+def calculate_max_value(filtered_power_set: List[Tuple[List[int], int, int]]):
+    max_val = 0
+    for set in filtered_power_set:
+        if set[1] > max_val:
+            max_val = set[1]
+    return list(filter(lambda set: set[1] == max_val, filtered_power_set))
+
+
+def get_best_values(I, w):
+    for n , V in enumerate(calculate_max_value(apply_constraint(
+        w, calculate_values_and_weights(I)))):
+        print(f"Solution {n}")
+        for index, taken in enumerate(list(V[0])):
+            if taken:
+                print(I[index])
 
 
 # Implementation of the Brute force solution for the Knapsack Problem
 I: List[Item] = [Item("Dirt", 4, 0), Item("Computer", 10, 30), Item(
     "Fork", 5, 1), Item("Problem Set", 0, -10)]  # vector containing all the items
 
-print(calculate_max_value(apply_constraint(14, calculate_values_and_weights(I))))
+get_best_values(I, 14)
